@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Create Text File";
+}
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td><label>Enter Text :</label></td>
+            <td>@Html.TextArea("message", new { cols = 50, rows = 8 })</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input id="Submit1" type="submit" value="Ctreate Text File" /></td>
+        </tr>
+    </table>
+}

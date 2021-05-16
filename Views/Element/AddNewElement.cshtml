@@ -1,0 +1,24 @@
+﻿@model ElementModel
+@{
+    ViewData["Title"] = "AddNewLanguage";
+}
+
+<h3 class="display-4">Add New Language</h3>
+@if (ViewBag.IsSuccess != null && ViewBag.IsSuccess == true)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Add new Element Success</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<form method="POST" asp-action="AddNewElement">
+    <div class="form-group">
+        <label asp-for="TagName"></label>
+        <input asp-for="TagName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Add new Element" class="btn btn-primary" />
+    </div>
+</form>
