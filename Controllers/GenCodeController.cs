@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AutoGenCode.Controllers
@@ -28,10 +29,11 @@ namespace AutoGenCode.Controllers
             return View();
         }
 
-        public IActionResult GenCode(bool isSuccess = false, int elementId = 0)
+        public IActionResult GenCode(bool isSuccess = false, int elementId = 0, string elementName = "")
         {
             ViewBag.IsSuccess = isSuccess;
             ViewBag.ElementId = elementId;
+            ViewBag.ElementName = elementName;
             return View();
         }
 
@@ -43,9 +45,16 @@ namespace AutoGenCode.Controllers
                     var element = _elementRepository.GetElementById(Id).Result;
                     string readFilePath = "wwwroot\\code\\template.html";
                     string writeFilePath = CreateNewFile(readFilePath, element);
-                    return RedirectToAction(nameof(GenCode), new { isSuccess = true, elementId = Id });
+                    return RedirectToAction(nameof(GenCode), new { isSuccess = true, elementId = Id, elementName = element.TagName });
             }
             return View();
+        }
+
+        public FileResult DownloadFile(string fileName)
+        {
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "code\\result\\") + fileName;
+            byte[] bytes = System.IO.File.ReadAllBytes(path);
+            return File(bytes, "application/octet-stream", fileName);
         }
 
         private string CreateNewFile(string readFilePath, ElementModel element)
@@ -61,9 +70,8 @@ namespace AutoGenCode.Controllers
                 string line = sr.ReadLine();
                 while (line != null)
                 {
-                    if(String.Compare(line, "\n") == 0)
+                    if (line.Length == 0)
                     {
-                        Console.WriteLine("Ki tu xonh dong");
                         sw.WriteLine(content);
                     }
                     else

@@ -24,7 +24,7 @@ namespace AutoGenCode.Controllers
             var data = await _elementRepository.GetElements();
             return View(data);
         }
-        public ViewResult AddNewElement(bool isSuccess = false, int elementId = 0)
+        public ViewResult GetElement(bool isSuccess = false, int elementId = 0)
         {
             ViewBag.IsSuccess = isSuccess;
             ViewBag.ElementId = elementId;
