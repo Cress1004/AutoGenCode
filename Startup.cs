@@ -24,7 +24,7 @@ namespace AutoGenCode
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<ElementContext>((options) =>
+            services.AddDbContext<TagContext>((options) =>
               options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")
               ));
             services.AddScoped<ElementRepository, ElementRepository>();
