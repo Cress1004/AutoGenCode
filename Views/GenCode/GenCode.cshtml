@@ -1,6 +1,6 @@
 ﻿
-@inject AutoGenCode.Repository.ElementRepository _elementRepo;
-@model ElementModel;
+@inject AutoGenCode.Repository.TagRepository _elementRepo;
+@model TagModel;
 @{
     ViewData["Title"] = "Gencode";
 }
@@ -12,14 +12,14 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
-    @Html.ActionLink("Download", "DownloadFile", "GenCode", new{fileName = @ViewBag.ElementName + "Element.html"})
+    @Html.ActionLink("Download", "DownloadFile", "GenCode", new{fileName = @ViewBag.TagName + "Element.html"})
 </div>
 }
 
 <form method="POST" asp-action="GenCode">
     <div class="form-group">
-        <label asp-for="Id"></label>
-        <select asp-for="Id" class="form-control" asp-items="(await _elementRepo.GetElements()).Select(x=> new SelectListItem() {Text = x.TagName, Value=x.Id.ToString()})">
+        <label asp-for="TagId"></label>
+        <select asp-for="TagId" class="form-control" asp-items="(await _elementRepo.GetTags()).Select(x=> new SelectListItem() {Text = x.TagName, Value=x.TagId.ToString()})">
             <option value="">Please choose Item</option>
         </select>
     </div>

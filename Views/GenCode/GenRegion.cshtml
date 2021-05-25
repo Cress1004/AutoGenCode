@@ -1,0 +1,51 @@
+﻿@inject AutoGenCode.Repository.TagRepository _tagRepo;
+
+@model RegionModel;
+
+@{
+    ViewData["Title"] = "Gencode";
+}
+
+<h3 class="display-4">GenRegion</h3>
+@if (ViewBag.IsSuccess != null && ViewBag.IsSuccess == true)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Gen code success</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @Html.ActionLink("Download", "DownloadFile", "GenCode", new { fileName = ViewBag.RegionName })
+    </div>
+}
+
+<form method="POST" asp-action="GenRegion">
+    <div class="form-group">
+        <label asp-for="TagId"></label>
+        <select asp-for="TagId" class="form-control"
+                asp-items="(await _tagRepo.GetTags())
+                .Select(x=> new SelectListItem() {Text = x.TagName, Value=x.TagId.ToString()})">
+            <option value="">Please choose Item</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Width"></label>
+        <input type="number" placeholder="Width" step="0.01" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Height"></label>
+        <input type="number" placeholder="Height" step="0.01" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LeftPos"></label>
+        <input type="number" placeholder="LeftPos" step="0.01" />
+    </div>
+    <div class="form-group">
+        <label asp-for="RightPos"></label>
+        <input type="number" placeholder="RightPos" step="0.01" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="GenRegion" class="btn btn-primary" />
+    </div>
+</form>
+© 2021 GitHub, Inc.

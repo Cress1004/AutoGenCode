@@ -1,4 +1,5 @@
-﻿using AutoGenCode.Models;
+﻿using AutoGenCode.Data;
+using AutoGenCode.Models;
 using AutoGenCode.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,14 +15,21 @@ namespace AutoGenCode.Controllers
 {
     public class GenCodeController : Controller
     {
-        private readonly ElementRepository _elementRepository = null;
+        private static Random random = new Random();
+        private readonly TagRepository _tagRepository = null;
+        private readonly RegionRepository _regionRepository = null;
+        private readonly GenUIRepository _genUIRepository = null;
         private readonly IWebHostEnvironment _webHostEnvironment;
         public GenCodeController(
-            ElementRepository elementRepository,
+            TagRepository tagRepository,
+            RegionRepository regionRepository,
+            GenUIRepository genUIRepository,
             IWebHostEnvironment webHostEnvironment
         )
         {
-            _elementRepository = elementRepository;
+            _tagRepository = tagRepository;
+            _regionRepository = regionRepository;
+            _genUIRepository = genUIRepository;
             _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
@@ -29,11 +37,36 @@ namespace AutoGenCode.Controllers
             return View();
         }
 
-        public IActionResult GenCode(bool isSuccess = false, int elementId = 0, string elementName = "")
+        public IActionResult GenRegion(bool isSuccess = false, int regionId = 0, string regionName = "")
         {
             ViewBag.IsSuccess = isSuccess;
-            ViewBag.ElementId = elementId;
-            ViewBag.ElementName = elementName;
+            ViewBag.RegionId = regionId;
+            ViewBag.RegionName = regionName;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GenRegion(RegionModel region)
+        {
+            if (ModelState.IsValid)
+            {
+                int id = await _regionRepository.AddNewRegion(region);
+                if (id > 0)
+                {
+                    var dateTime = DateTime.UtcNow.GetHashCode().ToString();
+                    string readFilePath = "wwwroot\\code\\template.html";
+                    string fileName = CreateNewRegionFile(readFilePath, region, dateTime);
+                    return RedirectToAction(nameof(GenRegion), new { isSuccess = true, regionId = id, regionName = fileName });
+                }
+            }
+            return View();
+        }
+
+        public IActionResult GenCode(bool isSuccess = false, int tagId = 0, string tagName = "")
+        {
+            ViewBag.IsSuccess = isSuccess;
+            ViewBag.TagId = tagId;
+            ViewBag.TagName = tagName;
             return View();
         }
 
@@ -42,10 +75,10 @@ namespace AutoGenCode.Controllers
         {
                 if (Id != 0)
                 {
-                    var element = _elementRepository.GetElementById(Id).Result;
+                    var tag = _tagRepository.GetTagById(Id).Result;
                     string readFilePath = "wwwroot\\code\\template.html";
-                    string writeFilePath = CreateNewFile(readFilePath, element);
-                    return RedirectToAction(nameof(GenCode), new { isSuccess = true, elementId = Id, elementName = element.TagName });
+                    string writeFilePath = CreateNewTagFile(readFilePath, tag);
+                    return RedirectToAction(nameof(GenCode), new { isSuccess = true, tagId = Id, tagName = tag.TagName });
             }
             return View();
         }
@@ -57,11 +90,11 @@ namespace AutoGenCode.Controllers
             return File(bytes, "application/octet-stream", fileName);
         }
 
-        private string CreateNewFile(string readFilePath, ElementModel element)
+        private string CreateNewTagFile(string readFilePath, TagModel tag)
         {
-            string tagName = element.TagName;
-            string writeFilePath = "wwwroot\\code\\result\\" + tagName + "Element.html";
-            string content = "<" + tagName + ">" + "<" + tagName + "/>";
+            string fileName = tag.TagName;
+            string writeFilePath = "wwwroot\\code\\result\\" + fileName + "Tag.html";
+            string content = "<" + fileName + ">" + "<" + fileName + "/>";
             try
             {
                 StreamReader sr = new StreamReader(readFilePath);
@@ -83,6 +116,50 @@ namespace AutoGenCode.Controllers
                 sr.Close();
                 sw.Close();
                 return writeFilePath;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+            return null;
+        }
+
+        private string CreateNewRegionFile(string readFilePath, RegionModel region, string dateTime)
+        {
+            string fileName = "region_" + dateTime + ".html";
+            string writeFilePath = "C:\\Users\\thanh.nth176871\\source\\repos\\AutoGenCode\\wwwroot\\code\\result\\" + fileName;
+            Console.WriteLine(writeFilePath);
+            var tagName =  _tagRepository.GetTagById(region.TagId).Result.TagName;
+            string content = "<" + tagName +
+                                    " height =" + region.Height + 
+                                    " width =" + region.Width + 
+                                    ">" +
+                                    "<" + tagName + "/>";
+            try
+            {
+                StreamReader sr = new StreamReader(readFilePath);
+                string path = Path.Combine(_webHostEnvironment.WebRootPath, writeFilePath);
+                StreamWriter sw = new StreamWriter(fileName);
+                string line = sr.ReadLine();
+                while (line != null)
+                {
+                    if (line.Length == 0)
+                    {
+                        sw.WriteLine(content);
+                    }
+                    else
+                    {
+                        sw.WriteLine(line);
+                    }
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+                sw.Close();
+                return fileName;
             }
             catch (Exception e)
             {

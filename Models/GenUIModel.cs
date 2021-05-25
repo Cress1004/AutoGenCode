@@ -1,18 +1,19 @@
-﻿using System;
+﻿using AutoGenCode.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AutoGenCode.Data
+namespace AutoGenCode.Models
 {
-    public class Regions
+    public class GenUIModel
     {
         public int Id { get; set; }
-        public int TagId { get; set; }
-        public float LeftPos { get; set; }
-        public float RightPos { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
         public DateTime? CreatedAt { get; set; }
+        /*public List<TagModel> Tags { get; set; }*/
+        public List<Region> Regions { get; set; }
+        public List<GenUITag> Tags { get; set; }
     }
 }

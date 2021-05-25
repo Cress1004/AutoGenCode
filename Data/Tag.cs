@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace AutoGenCode.Data
 {
-    public class GenUI
+    public class Tag
     {
-        public int GenUIId { get; set; }
-        public float Width { get; set; }
-        public float Height { get; set; }
+        public int TagId { get; set; }
+        public string TagName { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public ICollection<GenUITag> Tags { get; set; }
-        /*public ICollection<GenUITag> GenUITags { get; set; }*/
         public ICollection<Region> Regions { get; set; }
+        /*public ICollection<GenUI> GenUIs { get; set; }*/
+        public ICollection<GenUITag> GenUIs { get; set; }
     }
 }

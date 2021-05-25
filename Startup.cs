@@ -27,7 +27,9 @@ namespace AutoGenCode
             services.AddDbContext<TagContext>((options) =>
               options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")
               ));
-            services.AddScoped<ElementRepository, ElementRepository>();
+            services.AddScoped<TagRepository, TagRepository>();
+            services.AddScoped<RegionRepository, RegionRepository>();
+            services.AddScoped<GenUIRepository, GenUIRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

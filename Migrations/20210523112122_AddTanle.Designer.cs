@@ -3,14 +3,16 @@ using System;
 using AutoGenCode.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AutoGenCode.Migrations
 {
     [DbContext(typeof(TagContext))]
-    partial class TagContextModelSnapshot : ModelSnapshot
+    [Migration("20210523112122_AddTanle")]
+    partial class AddTanle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,11 +47,14 @@ namespace AutoGenCode.Migrations
                     b.Property<int>("TagId")
                         .HasColumnType("int");
 
+                    b.Property<int>("GenUITagId")
+                        .HasColumnType("int");
+
                     b.HasKey("GenUIId", "TagId");
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("GenUITag");
+                    b.ToTable("GenUITags");
                 });
 
             modelBuilder.Entity("AutoGenCode.Data.Region", b =>
@@ -108,13 +113,13 @@ namespace AutoGenCode.Migrations
             modelBuilder.Entity("AutoGenCode.Data.GenUITag", b =>
                 {
                     b.HasOne("AutoGenCode.Data.GenUI", "GenUI")
-                        .WithMany("Tags")
+                        .WithMany("GenUITags")
                         .HasForeignKey("GenUIId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AutoGenCode.Data.Tag", "Tag")
-                        .WithMany("GenUIs")
+                        .WithMany("GenUITags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -145,14 +150,14 @@ namespace AutoGenCode.Migrations
 
             modelBuilder.Entity("AutoGenCode.Data.GenUI", b =>
                 {
-                    b.Navigation("Regions");
+                    b.Navigation("GenUITags");
 
-                    b.Navigation("Tags");
+                    b.Navigation("Regions");
                 });
 
             modelBuilder.Entity("AutoGenCode.Data.Tag", b =>
                 {
-                    b.Navigation("GenUIs");
+                    b.Navigation("GenUITags");
 
                     b.Navigation("Regions");
                 });
