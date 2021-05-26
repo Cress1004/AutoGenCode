@@ -10,9 +10,13 @@ namespace AutoGenCode.Models
     {
         public int TagId { get; set; }
         public string TagName { get; set; }
+        public bool HasEndTag { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<Region> Regions { get; set; }
-        /*public List<GenUI> GenUIs { get; set; }*/
         public List<GenUITag> GenUIs { get; set; }
+        public TagModel()
+        {
+            HasEndTag = true;
+        }
     }
 }

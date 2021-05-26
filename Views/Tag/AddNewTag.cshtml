@@ -13,12 +13,29 @@
         </button>
     </div>
 }
-<form method="POST" asp-action="AddNewElement">
+<form method="POST" asp-action="AddNewTag">
     <div class="form-group">
         <label asp-for="TagName"></label>
         <input asp-for="TagName" class="form-control" />
     </div>
     <div class="form-group">
-        <input type="submit" value="Add new Element" class="btn btn-primary" />
+        @*  End Tag:<br/>
+        Yes: <input checked="checked"
+               asp-for="HasEndTag"
+               type="radio"
+               value="0" />
+        No: <input asp-for="HasEndTag"
+               type="radio"
+               value="1" />*@
+        @Html.LabelFor(model => model.HasEndTag, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            Yes
+            @Html.RadioButtonFor(model => model.HasEndTag, true)
+            No
+            @Html.RadioButtonFor(model => model.HasEndTag, false)
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Add new Tag" class="btn btn-primary" />
     </div>
 </form>

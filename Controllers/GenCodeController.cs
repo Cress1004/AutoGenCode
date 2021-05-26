@@ -130,26 +130,33 @@ namespace AutoGenCode.Controllers
 
         private string CreateNewRegionFile(string readFilePath, RegionModel region, string dateTime)
         {
-            string fileName = "region_" + dateTime + ".html";
-            string writeFilePath = "C:\\Users\\thanh.nth176871\\source\\repos\\AutoGenCode\\wwwroot\\code\\result\\" + fileName;
-            Console.WriteLine(writeFilePath);
-            var tagName =  _tagRepository.GetTagById(region.TagId).Result.TagName;
-            string content = "<" + tagName +
-                                    " height =" + region.Height + 
-                                    " width =" + region.Width + 
-                                    ">" +
-                                    "<" + tagName + "/>";
+            var tag = _tagRepository.GetTagById(region.TagId).Result;
+            string tagName = tag.TagName;
+            string fileName = tagName + "_" + dateTime + ".html";
+            string writeFilePath = "wwwroot\\code\\result\\" + fileName;
+
+            string attr = "<" + tagName +
+                                    " height=\"" + region.Height + "\"" +
+                                    " width=\"" + region.Width + "\"";
+            if (tag.HasEndTag) { 
+                attr += ">" + tagName + "</" + tagName + ">";
+            }
+            else
+            {
+                attr += "/>";
+            }
+            
             try
             {
                 StreamReader sr = new StreamReader(readFilePath);
                 string path = Path.Combine(_webHostEnvironment.WebRootPath, writeFilePath);
-                StreamWriter sw = new StreamWriter(fileName);
+                StreamWriter sw = new StreamWriter(writeFilePath);
                 string line = sr.ReadLine();
                 while (line != null)
                 {
                     if (line.Length == 0)
                     {
-                        sw.WriteLine(content);
+                        sw.WriteLine(attr);
                     }
                     else
                     {

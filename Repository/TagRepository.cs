@@ -22,6 +22,7 @@ namespace AutoGenCode.Repository
             {
                 TagId = x.TagId,
                 TagName = x.TagName,
+                HasEndTag = x.HasEndTag,
             }).ToListAsync();
         }
 
@@ -30,6 +31,7 @@ namespace AutoGenCode.Repository
             var newTag = new Tag()
             {
                 TagName = model.TagName,
+                HasEndTag = model.HasEndTag,
                 CreatedAt = DateTime.UtcNow,
             };
 
@@ -44,6 +46,7 @@ namespace AutoGenCode.Repository
             return await _context.Tags.Where(x => x.TagId == id).Select(tag => new TagModel()
             {
                 TagName = tag.TagName,
+                HasEndTag = tag.HasEndTag,
             }).FirstOrDefaultAsync();
         }
 

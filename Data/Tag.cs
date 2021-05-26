@@ -10,9 +10,9 @@ namespace AutoGenCode.Data
     {
         public int TagId { get; set; }
         public string TagName { get; set; }
+        public bool HasEndTag { get; set; }
         public DateTime? CreatedAt { get; set; }
         public ICollection<Region> Regions { get; set; }
-        /*public ICollection<GenUI> GenUIs { get; set; }*/
         public ICollection<GenUITag> GenUIs { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace AutoGenCode.Controllers
             var data = await _tagRepository.GetTags();
             return View(data);
         }
-        public ViewResult GetTag(bool isSuccess = false, int tagId = 0)
+        public ViewResult AddNewTag(bool isSuccess = false, int tagId = 0)
         {
             ViewBag.IsSuccess = isSuccess;
             ViewBag.TagId = tagId;

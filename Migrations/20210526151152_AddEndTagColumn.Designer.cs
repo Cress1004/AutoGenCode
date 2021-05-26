@@ -3,14 +3,16 @@ using System;
 using AutoGenCode.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AutoGenCode.Migrations
 {
     [DbContext(typeof(TagContext))]
-    partial class TagContextModelSnapshot : ModelSnapshot
+    [Migration("20210526151152_AddEndTagColumn")]
+    partial class AddEndTagColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
